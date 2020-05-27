@@ -1,7 +1,12 @@
 <template>
   <div class="container">
-    <div v-show="loading" class="bg-secondary text-light notification text-center">
-      データのロード....
+    <div
+      v-show="loading"
+      class="row bg-secondary text-light notification text-center"
+    >
+      <div class="col-12">
+        データのロード....
+      </div>
     </div>
     <div class="row mt-3">
       <div class="col-12">
@@ -9,7 +14,11 @@
         <hr />
       </div>
       <div class="col-12 m-3">
-        <div class="form-check form-check-inline" v-for="(pref, index) in prefectures" :key="index">
+        <div
+          class="form-check form-check-inline"
+          v-for="(pref, index) in prefectures"
+          :key="index"
+        >
           <input
             class="form-check-input"
             type="checkbox"
@@ -17,20 +26,23 @@
             :value="pref.prefCode"
             @change="showData($event, pref)"
           />
-          <label class="form-check-label" for="inlineCheckbox1">{{pref.prefName}}</label>
+          <label class="form-check-label" for="inlineCheckbox1">{{
+            pref.prefName
+          }}</label>
         </div>
       </div>
     </div>
     <div class="row mt-3">
       <div class="col-12">
-        <GChart v-show="data" type="LineChart" :data="chartData" :options="chartOptions" />
+        <GChart
+          v-show="data"
+          type="LineChart"
+          :data="chartData"
+          :options="chartOptions"
+        />
         <div v-show="!data" class="card border-info card-body">
           人口を見るようにをチェクください
         </div>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-12">
       </div>
     </div>
     <div class="row footer mb-3">
@@ -77,7 +89,7 @@ export default {
       chartOptions: {
         chart: {
           title: 'Yumemi challenge',
-          subtitle: 'Japan\'s prefectures population growth: 1960-2045'
+          subtitle: "Japan's prefectures population growth: 1960-2045"
         }
       },
       prefectures: []
@@ -86,21 +98,23 @@ export default {
   mounted () {
     axios
       .get('https://opendata.resas-portal.go.jp/api/v1/prefectures')
-      .then((response) => {
+      .then(response => {
         this.prefectures = response.data.result
       })
   },
   methods: {
     fetchData (prefCode) {
       return axios
-        .get('https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=' + prefCode)
-        .then((response) => {
+        .get(
+          'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=' +
+            prefCode
+        )
+        .then(response => {
           var tab = []
           const datas = response.data.result.data
           datas.forEach(element => {
             element.data.forEach(data => {
-              if (tab[data.year] === null || tab[data.year] === undefined
-              ) {
+              if (tab[data.year] === null || tab[data.year] === undefined) {
                 tab[data.year] = data.value
               } else {
                 tab[data.year] += data.value
@@ -109,7 +123,11 @@ export default {
           })
           var finalTab = {}
           for (let index = 0; index < tab.length; index++) {
-            if (tab[index] !== 0 && tab[index] !== undefined && tab[index] !== null) {
+            if (
+              tab[index] !== 0 &&
+              tab[index] !== undefined &&
+              tab[index] !== null
+            ) {
               finalTab[index] = tab[index]
             }
           }
@@ -149,9 +167,6 @@ export default {
         for (let index = 0; index < this.chartData.length; index++) {
           this.chartData[index].splice(target, 1)
         }
-        if (this.chartData[0].length === 1) {
-          this.chartData = this.defaultChartData
-        }
         this.loading = false
       }
     }
@@ -169,14 +184,15 @@ export default {
 <style lang="css" scoped>
 .notification {
   position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 }
 .footer {
-   position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translate(-50%,-50%);
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, -50%);
 }
 </style>
