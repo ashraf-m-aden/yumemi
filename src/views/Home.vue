@@ -52,27 +52,6 @@ export default {
   data () {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function
-      defaultChartData: [
-        ['Year'],
-        ['1960'],
-        ['1965'],
-        ['1970'],
-        ['1975'],
-        ['1980'],
-        ['1985'],
-        ['1990'],
-        ['1995'],
-        ['2000'],
-        ['2005'],
-        ['2010'],
-        ['2015'],
-        ['2020'],
-        ['2025'],
-        ['2030'],
-        ['2035'],
-        ['2040'],
-        ['2045']
-      ],
       chartData: [
         ['Year'],
         ['1960'],
@@ -109,10 +88,6 @@ export default {
       .get('https://opendata.resas-portal.go.jp/api/v1/prefectures')
       .then((response) => {
         this.prefectures = response.data.result
-        this.chartData = this.defaultChartData
-      })
-      .catch(function (error) {
-        console.log(error)
       })
   },
   methods: {
